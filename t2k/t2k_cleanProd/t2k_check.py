@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 
 import os
+import sys
+sys.path.append('../../libFns')
 
 
-
-from dirac_ls import *
+#from dirac_ls import *
 from diracTools import* 
+
 # included in dirac_ls
 #from DIRAC.Core.Base import Script
 #Script.initialize()
@@ -47,7 +49,7 @@ def dfc_list(local_path, dfc_path, type_dir, type_name):
 
     mklocal = 'mkdir -p ' + local_path
     os.system(mklocal)
-    
+   
     dfc_list = dirac__ls(dfc_path + type_dir)
     
     file_name = local_path + '/'+ type_name + '_dfc.list'
@@ -97,7 +99,7 @@ def extract_num_list(inList, outList):
 def extract_miss_rep( numList, misList, repList ):
 
 
-    f_num  = open(numList, "r")
+    f_num = open(numList, "r")
     f_mis = open(misList,"w+")
     f_rep = open(repList,"w+")
     
@@ -113,6 +115,10 @@ def extract_miss_rep( numList, misList, repList ):
     # create a list, where each element is a line from the text file
     lines = f_num.readlines()
     n_lines = len(lines)
+    print('# lines = '),
+    print(n_lines)
+    print(lines[0])
+    print('')
     
     
     # to find repeated lines, you just need to check each line compared to the line above
@@ -135,28 +141,37 @@ def extract_miss_rep( numList, misList, repList ):
     # if it does not match, add to missing list
     
     num = (  lines[lines_index].rstrip('\n')  ).split(' ', 1)
+ 
+    if( int(num[0]) < startRun ):
+        print('First file run number is below loop range!! ')
+        exit()
+    if( int(num[1]) < startSub ):
+        print('First file subrun number is below loop range!! ')
+        exit()
     
     for i in range (startRun, endRun, 1):
         for k in range (startSub, endSub, 1):
-    
+                       
+   
             # check if we exhausted list of files 
             # in which case just add to missing list
             if( lines_index  == n_lines  ):  
+                #print('End of file')
                 code = str(i).zfill(8) +' '+ str(k).zfill(4)
                 f_mis.write( code )
                 f_mis.write('\n')
                 missing.append( (i,k) )
                 missing_index += 1
                 continue
-    
+
             if( (i,k) == ( int(num[0]), int(num[1]) ) ):
                 lines_index += 1            
                 # only need to update num when we increase the index
                 # provided it isnt at the end
                 if ( lines_index  != n_lines  ):
                     num = (  lines[lines_index].rstrip('\n')  ).split(' ', 1)  
-                    print('num = i'),
-                    print(num)
+                    #print('Found num = '),
+                    #print(num)
             else:
                 code = str(i).zfill(8) +' '+ str(k).zfill(4)
                 f_mis.write( code )
@@ -164,8 +179,9 @@ def extract_miss_rep( numList, misList, repList ):
                 missing.append( (i,k) )
                 missing_index += 1
                 reread = False
+                #print('--- MISSING num = i')
     
-    print( missing )
+    #print( missing )
 
 
     f_num.close()
@@ -175,22 +191,35 @@ def extract_miss_rep( numList, misList, repList ):
 
 
  
-clean = 'runX_name'
-local_path = './cleanUp/' + clean
+clean = '/p6L_run9water_neut/'
+local_path = '/data/king/t2k/GRID/dirac/ND280Computing/processing_scripts/cleanup/' + clean
 
 dfc_path = '/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/'
-type_dir  = '/numc/'  # i.e. subfolder(s)
-type_name = 'numc'    # file type name 
+
+types=[]
+types.append('numc')
+types.append('cata')
+types.append('anal')
+types.append('reco')
+types.append('cali')
+types.append('elmc')
+types.append('g4mc')
+#types.append('cnfg')
+
+for e in types:
+
+    print('Checking:  '),
+    print(e)
+
+    dfc_list(local_path, dfc_path, '/'+e+'/', e)
+
+    l_dfc  = local_path +'/'+ e +'_dfc.list'
+    l_num = local_path +'/'+ e +'_dfc_num.list'
+    extract_num_list(l_dfc, l_num)
+
+    l_mis = local_path +'/'+ e +'_dfc_mis.list'
+    l_rep = local_path +'/'+ e +'_dfc_rep.list'
+    extract_miss_rep( l_num, l_mis, l_rep )
 
 
-dfc_list(local_path, dfc_path, '/numc/', 'numc')
-dfc_list(local_path, dfc_path, '/logf/', 'logf')
-dfc_list(local_path, dfc_path, '/cata/', 'cata')
-#dfc_list(local_path, dfc_path, '/cnfg/', 'cnfg')
 
-l_in  = './cleanUp/runX_name/numc_dfc.list'
-l_out = './cleanUp/runX_name/numc_dfc_num.list'
-
-extract_num_list( l_in, l_out)
-
-extract_miss_rep( './cleanUp/runX_name/numc_dfc_num.list', './cleanUp/runX_name/numc_dfc_mis.list', './cleanUp/runX_name/numc_dfc_rep.list' )
