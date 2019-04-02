@@ -22,7 +22,7 @@ os.system( commandDATE  )
 os.system( commandBLANK )
 
 
-f_in = open('wcsim_dfc_missing.list', "r")
+f_in = open('wcsim_dfc_mis.list', "r")
 
 for line in f_in:
 
