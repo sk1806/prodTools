@@ -96,17 +96,17 @@ def extract_num_list(inList, outList):
 
 
 
-def extract_miss_rep( numList, misList, repList ):
+def extract_miss_rep( numList, misList, repList , startRun, endRun, startSub=0, endSub = 56):
 
 
     f_num = open(numList, "r")
     f_mis = open(misList,"w+")
     f_rep = open(repList,"w+")
     
-    startRun = 90910000
-    endRun   = 90910105 # excludes this numebr
-    startSub = 0
-    endSub   = 56  # excludes this number
+#    startRun = 90910000
+#    endRun   = 90910105 # excludes this numebr
+#    startSub = 0
+#    endSub   = 56  # excludes this number
     
     
     firstFind = [-99999999, -9999]
@@ -190,20 +190,27 @@ def extract_miss_rep( numList, misList, repList ):
 
 
 
- 
-clean = '/p6L_run9water_neut/'
-local_path = '/data/king/t2k/GRID/dirac/ND280Computing/processing_scripts/cleanup/' + clean
+#dfc_path = '/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/'
+#clean = '/p6L_run9water_neut/'
 
-dfc_path = '/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/'
+dfc_path = '/t2k.org/nd280/production006/T/mcp/anti-neut_D/2010-11-water/magnet/run5/'
+clean = 'p6T_run5water_anti-neut_D'
+start = 80510000
+end   = 80510079
+checkND280 = False
+
+local_path = '../../../runs/' + clean
+
 
 types=[]
 types.append('numc')
 types.append('cata')
-types.append('anal')
-types.append('reco')
-types.append('cali')
-types.append('elmc')
-types.append('g4mc')
+if(checkND280):
+    types.append('anal')
+    types.append('reco')
+    types.append('cali')
+    types.append('elmc')
+    types.append('g4mc')
 #types.append('cnfg')
 
 for e in types:
@@ -219,7 +226,10 @@ for e in types:
 
     l_mis = local_path +'/'+ e +'_dfc_mis.list'
     l_rep = local_path +'/'+ e +'_dfc_rep.list'
-    extract_miss_rep( l_num, l_mis, l_rep )
+    extract_miss_rep( l_num, l_mis, l_rep, start, end )
+
+
+
 
 
 
