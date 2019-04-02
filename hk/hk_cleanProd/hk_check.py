@@ -8,13 +8,23 @@
 #str_f_in
 
 
+
+stage = 'fitqun'
+#stage = 'wcsim'
+
+list_dfc = stage + '_dfc.list'
+list_num = stage + '_dfc_num.list'
+list_mis = stage + '_dfc_mis.list'
+
+
+
 #################################
 ######## Extract numbers ########
 #################################
 
 
-f_in  = open('wcsim_dfc.list', "r")
-f_num = open('wcsim_dfc_num.list', "w+")
+f_in  = open(list_dfc, "r")
+f_num = open(list_num, "w+")
 
 
 # read in each line, extract numbers in form: ABCD_EFGH
@@ -36,8 +46,8 @@ f_num.close()
 #### Extract missing numbers ####
 #################################
 
-f_num  = open('wcsim_dfc_num.list', "r")
-f_miss = open('wcsim_dfc_missing.list',"w+")
+f_num  = open(list_num, "r")
+f_miss = open(list_mis,"w+")
 
 startRun = 0
 endRun   = 100
