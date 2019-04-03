@@ -149,5 +149,5 @@
 
 /WCSimIO/RootFile wcsim_out_FILEID.root
 
-/run/beamOn 25
+/run/beamOn 30
 #exit

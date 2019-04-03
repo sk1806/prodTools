@@ -8,11 +8,19 @@ import fileinput
   # To read and edit files
 
 
-BATCHID = 'pos_1e22_HK_Tochibora'
-BATCHJID = 'wcsim_' + BATCHID + '.jid'
+# Directory for wcsimSandBox
+SAND = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/wcsimSandBox/'
+# Local directory for JSL, SH, MAC files
+OUT = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/out'
 
-LOCATION = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora/pos/wcsim'
+# File name where JID will be stored
+BATCHID = 'pos_1e22_HK_Tochibora_LBL2019Mar'
+BATCHJID = OUT+'/wcsim_' + BATCHID + '.jid'
 
+# DFC location for output (full path excluding /wcsim)
+LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/0000_0000-0019_9999'
+# Local directory of the .dat vector files
+LOCATIONLOCAL = '/data/hyperk/prod/LBL2019Mar/pos_split_dat/0000_0000-0019_9999/'
 
 commandBLANK = 'echo " " >> ' + BATCHJID
 commandDATE =  'date    >>  ' + BATCHJID
@@ -21,7 +29,8 @@ os.system( commandBLANK )
 os.system( commandDATE  )
 os.system( commandBLANK )
 
-
+# expecting input to be list of file ID including underscrore:
+# ABCD_EFGH
 f_in = open('wcsim_dfc_mis.list', "r")
 
 for line in f_in:
@@ -36,17 +45,26 @@ for line in f_in:
 
 
     # Create the JDL file for this job
-    fileJDL = 'wcsim_' + FILEID + '.jdl'
+    fileJDL = OUT+'/wcsim_' + FILEID + '.jdl'
     copyJDL = 'cp wcsim_temp.jdl  '+ fileJDL
     os.system( copyJDL )
 
     # Edit JDL file for this job to use specific IDs
     for line in fileinput.input(fileJDL, inplace=True):
       print line.rstrip().replace('FILEID', FILEID)
+    for line in fileinput.input(fileJDL, inplace=True):
+      print line.rstrip().replace('TEMPLOCLOCAL', LOCATIONLOCAL)
+    for line in fileinput.input(fileJDL, inplace=True):
+      print line.rstrip().replace('TEMPOUT', OUT)
+    for line in fileinput.input(fileJDL, inplace=True):
+      print line.rstrip().replace('TEMPSAND', SAND)
+
+
+
 
 
     # Create the executable file for this job
-    fileSH = 'wcsim_' + FILEID + '.sh'
+    fileSH = OUT+'/wcsim_' + FILEID + '.sh'
     copySH = 'cp wcsim_temp.sh  '+ fileSH
     os.system( copySH )
 
@@ -54,15 +72,15 @@ for line in f_in:
     for line in fileinput.input(fileSH, inplace=True):
       print line.rstrip().replace('FILEID', FILEID)
     for line in fileinput.input(fileSH, inplace=True):
-      print line.rstrip().replace('TEMPLOC', LOCATION)
+      print line.rstrip().replace('TEMPLOCDFC', LOCATIONDFC)
 
 
     # Create the MAC file for this job
-    fileMAC = 'wcsim_' + FILEID + '.mac'
+    fileMAC = OUT+'/wcsim_' + FILEID + '.mac'
     copyMAC = 'cp wcsim_temp.mac  '+ fileMAC
     os.system( copyMAC )
 
-    # Edit JDL file for this job to use specific IDs
+    # Edit MAC file for this job to use specific IDs
     for line in fileinput.input(fileMAC, inplace=True):
       print line.rstrip().replace('FILEID', FILEID)
 
@@ -72,5 +90,4 @@ for line in f_in:
 
     print('end:  FILEID = ' + FILEID )
    
-
 
