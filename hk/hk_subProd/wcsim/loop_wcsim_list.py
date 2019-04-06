@@ -12,7 +12,7 @@ SUBDIR='0000_0000-0019_9999'
 
 # Directory for wcsimSandBox
 SAND = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/wcsimSandBox/'
-# Local directory for JSL, SH, MAC files
+# Local directory for JDL, SH, MAC files
 OUT = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/out/'+SUBDIR
 # File name where JID will be stored
 BATCHID = 'pos_1e22_HK_Tochibora_LBL2019Mar'
