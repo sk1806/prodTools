@@ -44,8 +44,8 @@ echo ' '  2>&1 | tee -a logwc_out_FILEID.txt
 echo ' '
 echo ' '
 echo ' '
-dirac-dms-add-file ${LOCATIONDFC}/wcs/wcsim_out_FILEID.root  wcs_FILEID.root  UKI-LT2-QMUL2-disk -ddd    2>&1 | tee -a logwc_out_FILEID.txt
-dirac-dms-add-file ${LOCATIONDFC}/lwc/logwc_out_FILEID.txt   lwc_out_FILEID.txt   UKI-LT2-QMUL2-disk -ddd    
+dirac-dms-add-file ${LOCATIONDFC}/wcs/wcsim_out_FILEID.root  wcsim_out_FILEID.root  UKI-LT2-QMUL2-disk -ddd    2>&1 | tee -a logwc_out_FILEID.txt
+dirac-dms-add-file ${LOCATIONDFC}/lwc/logwc_out_FILEID.txt   logwc_out_FILEID.txt   UKI-LT2-QMUL2-disk -ddd    
 
 
 

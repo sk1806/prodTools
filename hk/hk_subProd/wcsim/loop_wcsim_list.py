@@ -7,20 +7,21 @@ import sys
 import fileinput
   # To read and edit files
 
+# subdirectory
+SUBDIR='0000_0000-0019_9999'
 
 # Directory for wcsimSandBox
 SAND = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/wcsimSandBox/'
 # Local directory for JSL, SH, MAC files
-OUT = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/out'
-
+OUT = '/data/king/grid/prodTools/hk/hk_subProd/wcsim/out/'+SUBDIR
 # File name where JID will be stored
 BATCHID = 'pos_1e22_HK_Tochibora_LBL2019Mar'
 BATCHJID = OUT+'/wcsim_' + BATCHID + '.jid'
 
 # DFC location for output (full path excluding /wcsim)
-LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/0000_0000-0019_9999'
+LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/'+SUBDIR
 # Local directory of the .dat vector files
-LOCATIONLOCAL = '/data/hyperk/prod/LBL2019Mar/pos_split_dat/0000_0000-0019_9999/'
+LOCATIONLOCAL = '/data/hyperk/prod/LBL2019Mar/pos_split_dat/'+SUBDIR
 
 commandBLANK = 'echo " " >> ' + BATCHJID
 commandDATE =  'date    >>  ' + BATCHJID
