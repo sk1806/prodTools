@@ -61,9 +61,6 @@ for line in f_in:
       print line.rstrip().replace('TEMPSAND', SAND)
 
 
-
-
-
     # Create the executable file for this job
     fileSH = OUT+'/wcsim_' + FILEID + '.sh'
     copySH = 'cp wcsim_temp.sh  '+ fileSH
