@@ -8,10 +8,16 @@ import fileinput
   # To read and edit files
 
 
-BATCHID = 'pos_1e22_HK_Tochibora'
-BATCHJID = 'fitqun_' + BATCHID + '.jid'
+# subdirectory
+SUBDIR='0000_0000-0019_9999'
+# Local directory for JDL, SH files
+OUT = '/data/king/grid/prodTools/hk/hk_subProd/fitqun/out/'+SUBDIR
 
-LOCATION = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora/pos/'
+BATCHID = 'pos_1e22_HK_Tochibora_LBL2019Mar'
+BATCHJID = OUT+'/fitqun_' + BATCHID + '.jid'
+
+# DFC location for output (full path excluding /wcsim)
+LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/'+SUBDIR
 
 commandBLANK = 'echo " " >> ' + BATCHJID
 commandDATE =  'date    >>  ' + BATCHJID
@@ -20,18 +26,10 @@ os.system( commandBLANK )
 os.system( commandDATE  )
 os.system( commandBLANK )
 
-##for i in range(20, 30, 1):
-##
-##    for k in range(0, 650, 1):
+# expecting input to be list of file ID including underscrore:
+# ABCD_EFGH
+f_in = open('fitqun_dfc_mis.list', "r")
 
-LOCAL='/data/hyperk/prod/HK_Tochibora_100e22_Jan19/vector_HK_Tochibora_100e22/pos_split/t1'
-
-command_cd_in  = 'cd ' + LOCAL
-command_cd_out = 'cd - '
-
-f_in = open('./fitqun_dfc_mis.list', "r")
-
-os.system(command_cd_in)
 for line in f_in:
 
     line = line.rstrip('\n')
@@ -45,17 +43,19 @@ for line in f_in:
 
 
     # Create the JDL file for this job
-    fileJDL = 'fitqun_' + FILEID + '.jdl'
+    fileJDL = OUT+'/fitqun_' + FILEID + '.jdl'
     copyJDL = 'cp fitqun_temp.jdl  '+ fileJDL
     os.system( copyJDL )
 
     # Edit JDL file for this job to use specific IDs
     for line in fileinput.input(fileJDL, inplace=True):
       print line.rstrip().replace('FILEID', FILEID)
+    for line in fileinput.input(fileJDL, inplace=True):
+      print line.rstrip().replace('TEMPOUT', OUT)
 
 
     # Create the executable file for this job
-    fileSH = 'fitqun_' + FILEID + '.sh'
+    fileSH = OUT+'/fitqun_' + FILEID + '.sh'
     copySH = 'cp fitqun_temp.sh  '+ fileSH
     os.system( copySH )
 
@@ -63,8 +63,7 @@ for line in f_in:
     for line in fileinput.input(fileSH, inplace=True):
       print line.rstrip().replace('FILEID', FILEID)
     for line in fileinput.input(fileSH, inplace=True):
-      print line.rstrip().replace('TEMPLOC', LOCATION)
-
+      print line.rstrip().replace('TEMPLOCDFC', LOCATIONDFC)
   
 
     diracSub = 'dirac-wms-job-submit ' + fileJDL + ' >> ' + BATCHJID
@@ -72,6 +71,4 @@ for line in f_in:
 
     print('end:  FILEID = ' + FILEID )
  
-
-os.system(command_cd_out)
 
