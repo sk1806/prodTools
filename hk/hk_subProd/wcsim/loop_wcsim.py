@@ -11,8 +11,8 @@ import fileinput
 BATCHID = 'pos_1e22_HK_Tochibora'
 BATCHJID = 'wcsim_' + BATCHID + '.jid'
 
-LOCATION = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora/pos/wcsim'
-
+LOCATIONDFC = '/hyperk.org/beam/miniprod/B/1e22_HK_Tochibora/pos/wcsim'
+LOCATIONLOCAL = '/data/hyperk/prod/LBL2019Mar/pos_split_dat/0000_0000-0019_9999/'
 
 commandBLANK = 'echo " " >> ' + BATCHJID
 commandDATE =  'date    >>  ' + BATCHJID
@@ -22,7 +22,6 @@ os.system( commandDATE  )
 os.system( commandBLANK )
 
 for i in range(5, 30, 1):
-
     for k in range(0, 650, 1):
 
 
@@ -39,6 +38,8 @@ for i in range(5, 30, 1):
         # Edit JDL file for this job to use specific IDs
         for line in fileinput.input(fileJDL, inplace=True):
           print line.rstrip().replace('FILEID', FILEID)
+        for line in fileinput.input(fileJDL, inplace=True):
+          print line.rstrip().replace('TEMPLOCLOCAL', LOCATIONLOCAL)
     
     
         # Create the executable file for this job
@@ -46,12 +47,13 @@ for i in range(5, 30, 1):
         copySH = 'cp wcsim_temp.sh  '+ fileSH
         os.system( copySH )
     
-        # Edit executable file for this job to use specific IDs
+        # Edit executable file for this job to use specific indevidual IDs
+        # And also edit the dfc path and local path
         for line in fileinput.input(fileSH, inplace=True):
           print line.rstrip().replace('FILEID', FILEID)
         for line in fileinput.input(fileSH, inplace=True):
-          print line.rstrip().replace('TEMPLOC', LOCATION)
-    
+          print line.rstrip().replace('TEMPLOCDFC', LOCATIONDFC)
+   
     
         # Create the MAC file for this job
         fileMAC = 'wcsim_' + FILEID + '.mac'
