@@ -16,7 +16,7 @@ OUT = '/data/king/grid/prodTools/hk/hk_subProd/fitqun/out/'+SUBDIR
 BATCHID = 'pos_1e22_HK_Tochibora_LBL2019Mar'
 BATCHJID = OUT+'/fitqun_' + BATCHID + '.jid'
 
-# DFC location for output (full path excluding /wcsim)
+# DFC location for output (full path excluding /fqn)
 LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/'+SUBDIR
 
 commandBLANK = 'echo " " >> ' + BATCHJID
@@ -28,7 +28,7 @@ os.system( commandBLANK )
 
 # expecting input to be list of file ID including underscrore:
 # ABCD_EFGH
-f_in = open('fitqun_dfc_mis.list', "r")
+f_in = open('wcsim.list_ab', "r")
 
 for line in f_in:
 
