@@ -17,6 +17,14 @@ LOCATIONDFC=TEMPLOCDFC
 echo 'Obtaining file '${LOCATIONDFC}'/wcs/wcsim_out_FILEID.root'
 echo ''
 dirac-dms-get-file ${LOCATIONDFC}/wcs/wcsim_out_FILEID.root
+ES1=$? # Exist status
+if [ ${ES1} -neq 0 ];
+  then 
+    echo 'Failed to obtain wcsim file ' >&2
+    exit 1
+fi
+
+
 echo ''
 
 source /cvmfs/hyperk.egi.eu/prod2018/env-WCSim_CVMFS.sh
@@ -41,6 +49,14 @@ date
 echo ' '    2>&1 | tee -a logfq_out_FILEID.txt
 
 # save file to grid
-dirac-dms-add-file ${LOCATIONDFC}/fqn/4_ring/fitqun_out_FILEID.root  fitqun_out_FILEID.root  UKI-LT2-QMUL2-disk -ddd     2>&1 | tee -a logfq_out_FILEID.txt
-dirac-dms-add-file ${LOCATIONDFC}/lfq/logfq_out_FILEID.txt   logfq_out_FILEID.txt   UKI-LT2-QMUL2-disk -ddd
+dirac-dms-add-file ${LOCATIONDFC}/fqn/fitqun_out_FILEID.root  fitqun_out_FILEID.root  UKI-LT2-QMUL2-disk -ddd     2>&1 | tee -a logfq_out_FILEID.txt
+
+ES2=$? # Exit status
+if [ ${ES1} -neq 0 ];
+  then
+    echo 'Failed to add fitqun file to DFC ' >&2
+    exit 1
+fi
+
+dirac-dms-add-file ${LOCATIONDFC}/lfq/logfq_out_FILEID.txt     logfq_out_FILEID.txt   UKI-LT2-QMUL2-disk -ddd
 
