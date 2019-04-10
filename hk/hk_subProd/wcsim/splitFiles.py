@@ -28,10 +28,10 @@ for i in range(0,100,1):
 
     folders = []
     folders.append('./'+sign+'_split_dat/0000_0000-0019_9999')
-    folders.append('./'+sign+'_split_dat/0020_2000-0039_9999')
-    folders.append('./'+sign+'_split_dat/0040_4000-0059_9999')
-    folders.append('./'+sign+'_split_dat/0060_6000-0079_9999')
-    folders.append('./'+sign+'_split_dat/0080_8000-0099_9999')
+    folders.append('./'+sign+'_split_dat/0020_0000-0039_9999')
+    folders.append('./'+sign+'_split_dat/0040_0000-0059_9999')
+    folders.append('./'+sign+'_split_dat/0060_0000-0079_9999')
+    folders.append('./'+sign+'_split_dat/0080_0000-0099_9999')
 
     for folder in folders:
         if not os.path.exists(folder):
