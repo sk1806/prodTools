@@ -30,25 +30,8 @@ Script.parseCommandLine()
 from DIRAC.DataManagementSystem.Client.DataManager import DataManager
 dm = DataManager()
 
-#
-##lfn = "/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/numc/oa_nt_beam_90910104-0038_e6emxphl6w3g_numc_000_magnet201508waterrun9.root"
-#lfn='/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/numc/oa_nt_beam_90910059-0016_dm4kw3yo2aeb_numc_000_magnet201508waterrun9.root'
 site = "UKI-LT2-QMUL2-disk"
-#
-#res = dm.getReplicaSize(lfn, site)
-#print('res = ' )
-#print(res)
-#
-#size = res['Value']['Successful'][lfn]
-#print('size = ')
-#print(size)
-#
 
-
-f_size = open("size.list", "w+")
-f_size_small = open("size_small.list", "w+")
-f_size_small_del = open("size_small_del.list", "w+")
-f_size_error = open("size_error.list", "w+")
 
 #dfc_path = "/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/"
 #lower_lim = 30000000 
@@ -56,14 +39,26 @@ f_size_error = open("size_error.list", "w+")
 #lower_lim = 170000000
 #type_dir = "anal"
 
+# p6D run5water anti-neut_D
+clean = 'p6T_run5water_anti-neut_D'
 dfc_path = "/t2k.org/nd280/production006/T/mcp/anti-neut_D/2010-11-water/magnet/run5/"
-
 lower_lim = 19200000 
 type_dir = "numc"
-
 #lower_lim = 170000000
 #type_dir = "anal"
 
+local_path = '/data/king/t2k/GRID/dirac/ND280Computing/processing_scripts/cleanup/runs/' + clean
+
+
+fullList  = 'local_path'+'/size_'+type_dir+'_full.list'
+smallList = 'local_path'+'/size_'+type_dir+'_small.list'
+delList   = 'local_path'+'/size_'+type_dir+'_del.list'
+errorList = 'local_path'+'/size_'+type_dir+'_error.list'
+
+f_size_full  = open(fullList, "w+")
+f_size_small = open(smallList,"w+")
+f_size_del   = open(delList,  "w+")
+f_size_error = open(errorList,"w+")
 
 
 
