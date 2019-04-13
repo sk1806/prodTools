@@ -23,6 +23,8 @@ LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/'+SU
 # Local directory of the .dat vector files
 LOCATIONLOCAL = '/data/hyperk/prod/LBL2019Mar/pos_split_dat/'+SUBDIR
 
+
+
 commandBLANK = 'echo " " >> ' + BATCHJID
 commandDATE =  'date    >>  ' + BATCHJID
 
@@ -82,6 +84,22 @@ for line in f_in:
     for line in fileinput.input(fileMAC, inplace=True):
       print line.rstrip().replace('FILEID', FILEID)
 
+
+    # Local vector
+    fileVEC=LOCATIONLOCAL+'/vector_'+FILEID+'.dat'
+   # Read the number of events to feed into the mac
+    nEvts = 0
+    search = open(fileVEC)
+    for line in search:
+        
+        if 'begin' in line:
+            nEvts = nEvts + 1
+    print 'nEvts',
+    print nEvts
+
+    # Edit MAC file for this job to use specific IDs
+    for line in fileinput.input(fileMAC, inplace=True):
+      print line.rstrip().replace('TEMPEVENTS', str(nEvts) )
 
     diracSub = 'dirac-wms-job-submit ' + fileJDL + ' >> ' + BATCHJID
     os.system( diracSub )
