@@ -70,7 +70,9 @@ def dfc_list(local_path, dfc_path, type_dir, type_name):
 def extract_num_list(inList, outList):
 #########################################
     
-    # read in each line, extract numbers in form: ABCD_EFGH
+    # read in each line, extract numbers
+    # from ABCD-EFGH in filename
+    # to   ABCD EFGH in output list
     # write to a new file
     
     f_in  = open(inList, "r")
@@ -190,6 +192,53 @@ def extract_miss_rep( numList, misList, repList , startRun, endRun, startSub=0, 
 
 
 
+
+########################################################
+def search_codes(numList, inpList, outList):
+########################################################
+    """Takes a file containing number codes ABCD EFGH
+       numList    = file containing list of numbers to search in form ABCD EFGH (no underscore)
+       fileList   = file to search for string  ABCD_EFGH (with underscore)
+       type_dir   = file containing search results, including full dfc pah
+     """
+
+    # read in each line, extract numbers in form: ABCD_EFGH
+    # write to a new file
+
+    f_num = open(numList, "r")
+    f_inp = open(inpList, "r")
+    f_out = open(outList, "w")
+
+   # if not (  os.path.isfile(inList)   ):
+   #    print >>sys.stderr, "extract_number_list :: In file list does not exist"  
+   #    return
+
+
+
+    for line in f_num:
+        mod_0 = line.rstrip('\n')                    # strip end of line
+        mod_1 = mod_0.rsplit(' ', 1)                 # remove directory structure
+        #print('mod_1[0] = '),
+        print(mod_1[0]),
+        print(' '),
+        #print('mod_1[1] = '),
+        print(mod_1[1])
+
+
+#        mod_2 = mod_1[1][11:][:13]                   # extract number code
+#        mod_3 = mod_2.split('-',1)                   # split into two numbers
+#        mod_4 = mod_3[0] + ' ' + mod_3[1]  + '\n'    # write numbers with space and end of line
+#        f_num.write(mod_4)
+
+    f_num.close()
+    f_inp.close()
+    f_out.close()
+########################################################
+
+
+
+
+
 #dfc_path = '/t2k.org/nd280/production006/L/mcp/neut/2015-08-water/magnet/run9/'
 #clean = '/p6L_run9water_neut/'
 
@@ -199,7 +248,7 @@ start = 80510000
 end   = 80510079
 checkND280 = False
 
-local_path = '../../../runs/' + clean
+local_path = '/data/king/t2k/GRID/dirac/ND280Computing/processing_scripts/cleanup/runs/' + clean
 
 
 types=[]
@@ -232,4 +281,4 @@ for e in types:
 
 
 
-
+print('agh ha')
