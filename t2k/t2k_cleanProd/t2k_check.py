@@ -196,40 +196,48 @@ def extract_miss_rep( numList, misList, repList , startRun, endRun, startSub=0, 
 ########################################################
 def search_codes(numList, inpList, outList):
 ########################################################
-    """Takes a file containing number codes ABCD EFGH
-       numList    = file containing list of numbers to search in form ABCD EFGH (no underscore)
-       fileList   = file to search for string  ABCD_EFGH (with underscore)
-       type_dir   = file containing search results, including full dfc pah
+    """Takes a file containing number codes ABCD EFGH,
+       adds the dash, and searches another list of files for these codes
+       numList   = file containing list of numbers to search in form 'ABCD EFGH' (no dash)
+       inpList   = file containing a list of files to search for the codes
+       outList  = file containing a list of files that match the codes
      """
 
-    # read in each line, extract numbers in form: ABCD_EFGH
-    # write to a new file
+    if not ( os.path.isfile(numList) ):
+       print >>sys.stderr, numList + ' does not exist'
+       return
+    if not ( os.path.isfile(inpList) ):
+       print >>sys.stderr, inpList + ' does not exist'
+       return
+
+    print('Reading numbers from:  ' + numList)
+    print('Searching files in:  ' + inpList)
+    print('Preparing list::  ' + numList)
 
     f_num = open(numList, "r")
     f_inp = open(inpList, "r")
     f_out = open(outList, "w")
 
-   # if not (  os.path.isfile(inList)   ):
-   #    print >>sys.stderr, "extract_number_list :: In file list does not exist"  
-   #    return
-
-
-
-    for line in f_num:
-        mod_0 = line.rstrip('\n')                    # strip end of line
-        mod_1 = mod_0.rsplit(' ', 1)                 # remove directory structure
-        #print('mod_1[0] = '),
-        print(mod_1[0]),
-        print(' '),
-        #print('mod_1[1] = '),
-        print(mod_1[1])
-
-
-#        mod_2 = mod_1[1][11:][:13]                   # extract number code
-#        mod_3 = mod_2.split('-',1)                   # split into two numbers
-#        mod_4 = mod_3[0] + ' ' + mod_3[1]  + '\n'    # write numbers with space and end of line
-#        f_num.write(mod_4)
-
+    # loop over file containing run codes
+    for num in f_num:
+        mod_0 = num.rstrip('\n')          # strip end of line
+        mod_1 = mod_0.rsplit(' ', 1)       # remove space
+        mod_2 = mod_1[0] +'-'+ mod_1[1]    # add dash
+        print('----------------------------------------')
+        print('')
+        print(mod_2)
+        # loop over list of files to search for run code matches
+        # provided the lists are in order 'break' is enough
+        # for the next number, carry on searching from the position of the last find
+        for line in f_inp:
+            found = line.find(mod_2)
+            print('')
+            print('line = ' + line)
+            print('Found = ' + str(found))
+            if(found != -1):
+                print('*** Found:  ' + line)
+                f_out.write(line)
+                break
     f_num.close()
     f_inp.close()
     f_out.close()
