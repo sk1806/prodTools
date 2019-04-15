@@ -153,8 +153,28 @@ def extract_miss_rep( numList, misList, repList , startRun, endRun, startSub=0, 
     
     for i in range (startRun, endRun, 1):
         for k in range (startSub, endSub, 1):
-                       
-   
+            print(i, k)
+            print('checking lines[lines_index] = '+  lines[lines_index])
+
+            # check for repeated run codes     
+            # check if line is the same as the one before
+            # if it is then write this line to the rep file
+            # then increase the line index (and hence 'num') 
+            # so you can still do the other checks now you skipped to the next line
+            # while keeping number i,k the same
+            if( lines_index>0 and lines[lines_index] == lines[lines_index -1] ):
+                print('Repeated entry:  ' +  lines[lines_index] )
+                # write the line to the file (node the i,k because these are now ahead)
+                code = str(num[0]).zfill(8) +' '+ str(num[1]).zfill(4)
+                f_rep.write( code )
+                f_rep.write('\n')
+                #lines_index += 1
+                lines_index += 1            
+                # only need to update num when we increase the index
+                # provided it isnt at the end
+                if ( lines_index  != n_lines  ):
+                    num = (  lines[lines_index].rstrip('\n')  ).split(' ', 1)  
+                 
             # check if we exhausted list of files 
             # in which case just add to missing list
             if( lines_index  == n_lines  ):  
