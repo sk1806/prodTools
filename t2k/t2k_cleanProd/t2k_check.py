@@ -218,26 +218,34 @@ def search_codes(numList, inpList, outList):
     f_inp = open(inpList, "r")
     f_out = open(outList, "w")
 
+    nseek = 0
     # loop over file containing run codes
     for num in f_num:
         mod_0 = num.rstrip('\n')          # strip end of line
         mod_1 = mod_0.rsplit(' ', 1)       # remove space
         mod_2 = mod_1[0] +'-'+ mod_1[1]    # add dash
-        print('----------------------------------------')
-        print('')
-        print(mod_2)
+        #print('----------------------------------------')
+        #print('')
+        #print('Searching for:  ' + mod_2)
         # loop over list of files to search for run code matches
-        # provided the lists are in order 'break' is enough
-        # for the next number, carry on searching from the position of the last find
+        # start at beggning each time
+        # could be more clever and go back to the position of last find? 
+        f_inp.seek(nseek)
         for line in f_inp:
             found = line.find(mod_2)
-            print('')
-            print('line = ' + line)
-            print('Found = ' + str(found))
+            #print('')
+            #print('line = ' + line)
+            #print('Found = ' + str(found))
             if(found != -1):
-                print('*** Found:  ' + line)
+                #print('*** Found:  ' + line)
                 f_out.write(line)
+                # Assuming files are in order
+                # the next search carries on from same place
+                # minus 10 safety net for duplicates
+                if(nseek>9):
+                    nseek = f_inp.readline() - 10
                 break
+
     f_num.close()
     f_inp.close()
     f_out.close()
