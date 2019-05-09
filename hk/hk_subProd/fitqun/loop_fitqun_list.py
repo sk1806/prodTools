@@ -7,17 +7,23 @@ import sys
 import fileinput
   # To read and edit files
 
+SIGN = 'pos'
 
 # subdirectory
-SUBDIR='0000_0000-0019_9999'
-# Local directory for JDL, SH files
-OUT = '/data/king/grid/prodTools/hk/hk_subProd/fitqun/out/'+SUBDIR
+#SUBDIR='0000_0000-0019_9999'
+#SUBDIR='0020_0000-0039_9999'
+SUBDIR='0040_0000-0059_9999'
+#SUBDIR='0060_0000-0079_9999'
+#SUBDIR='0080_0000-0099_9999'
 
-BATCHID = 'pos_1e22_HK_Tochibora_LBL2019Mar'
+# Local directory for JDL, SH files
+OUT = '/data/king/grid/prodTools/hk/hk_subProd/fitqun/out/'+SIGN+'/'+SUBDIR
+
+BATCHID = SIGN + '_1e22_HK_Tochibora_LBL2019Mar'
 BATCHJID = OUT+'/fitqun_' + BATCHID + '.jid'
 
 # DFC location for output (full path excluding /fqn)
-LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/pos/'+SUBDIR
+LOCATIONDFC = '/hyperk.org/beam/miniprod/A/1e22_HK_Tochibora_LBL2019Mar/'+ SIGN +'/'+SUBDIR
 
 commandBLANK = 'echo " " >> ' + BATCHJID
 commandDATE =  'date    >>  ' + BATCHJID
@@ -28,7 +34,7 @@ os.system( commandBLANK )
 
 # expecting input to be list of file ID including underscrore:
 # ABCD_EFGH
-f_in = open('wcsim.list_ab', "r")
+f_in = open('missing_fitqun.list', "r")
 
 for line in f_in:
 
